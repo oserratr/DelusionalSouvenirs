@@ -47,7 +47,7 @@ void draw() {
   imageMode(CENTER);
   image(goCard.pgCardRecto, width / 2, height / 4);
   exportPdfSon();
-  
+  // appel de la fonction debug
   if(debug){
     float dur = goCard.carteImage.sample.duration();
     float pos= goCard.carteImage.sample.position();
@@ -63,6 +63,12 @@ void draw() {
     );
     
   }
+    // Diporama si mousclicked false : toutes les 3s changement de carte recto verso (appel de la fonction reboot())
+
+  if ((postCard.textEffect.replaceText == false)&&(goCard.carteImage.rectoImage == false)) {
+    delay(3000);
+    reboot();
+  }
   
 }
 void mouseClicked() {
@@ -71,11 +77,7 @@ void mouseClicked() {
     postCard.textEffect.replaceText = true;
     goCard.carteImage.rectoImage = true;
     goCard.carteImage.sample.play();
-    goCard.carteImage.rms.input(goCard.carteImage.sample);
-    
-  } else if (mouseButton == LEFT) {
-    println("gauche");
-    reboot();
+    goCard.carteImage.rms.input(goCard.carteImage.sample); 
   }
 }
 
@@ -99,6 +101,7 @@ void exportPdfSon() {
   }
 }
 
+// Controllers pour debug (d pour faire apparaitre/disparaitre barre de chargement) & (j pour aller jusqu'a la fin de la card)
 void keyPressed(){
   if(key=='d'){
     debug=!debug;
