@@ -63,6 +63,12 @@ void draw() {
     );
     
   }
+    // Diporama si mousclicked false : toutes les 3s changement de carte recto verso (appel de la fonction reboot())
+
+  if ((postCard.textEffect.replaceText == false)&&(goCard.carteImage.rectoImage == false)) {
+    delay(3000);
+    reboot();
+  }
   
 }
 void mouseClicked() {
