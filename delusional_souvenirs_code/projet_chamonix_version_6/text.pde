@@ -5,7 +5,7 @@ class Text {
   int currentIndex = 0;
   int randomIndexOriginal;
   int randomIndexReplace = int(random(0, 5));
-  int interval = 1600; // 1/2 seconde (en millisecondes)
+  int interval = 400; // 1/2 seconde (en millisecondes)
   int lastTime;
   boolean replaceText = false;
   float posXTextChange;
