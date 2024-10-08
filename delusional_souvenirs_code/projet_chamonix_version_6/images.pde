@@ -62,21 +62,23 @@ class Image {
 
     pgParent = _pgParent;
 
-    sample = new SoundFile(parent, "4min.mp3");
+    sample = new SoundFile(parent, "1mintest.mp3");
 
     rms = new Amplitude(parent);
   }
 
   void draw() {
-    //random image
-    pgParent.imageMode(CORNER);
-    if (this.frameCounter == 0) {
-      pgParent.image(currentImage, 0, 0, 900, 600);
-      sample.stop();
-    }
+  //random image
+  pgParent.imageMode(CORNER);
+  if (this.frameCounter == 0) {
+    pgParent.image(currentImage, 0, 0, 900, 600);
+    sample.stop();
+  }
 
-    if (rectoImage == true) {
-      // println(rms.analyze());
+  if (rectoImage == true) {
+    // Tracer deux fois plus de lignes en dupliquant le bloc de code de dessin
+
+    for (int j = 0; j < 2; j++) {  // Boucle pour tracer 2 fois plus de lignes
 
       //fabrication des lignes
       float x = random(5, 900);
@@ -84,30 +86,36 @@ class Image {
       float y = random(i, 600);
       int newY = int(y);
       float lineHeight = random(300);
-      //int newLineHeight = int(lineHeight);
       color c = pgParent.get(newX, newY);
 
       //map du son à la largeur des rectangles
       float largeur = map (rms.analyze(), 0, 1, 1, 50);
       println (rms.analyze());
+
       //lignes
       pgParent.strokeWeight (largeur);
       pgParent.strokeCap(SQUARE);
       pgParent.stroke(c, random(alpha));
       pgParent.line(x, y, x, y+lineHeight);
-      i = i-1;
-      if (i<5) {
-        i=5;
+
+      // Réduction de la valeur de i et ajustement de l'alpha
+      i = i - 1;
+      if (i < 5) {
+        i = 5;
       }
+
       alpha = alpha - 0.2;
       if (alpha < 50) {
-        alpha =50;
+        alpha = 50;
       }
-      if (largeur <0) {
-        largeur = largeur*-1;
+      
+      if (largeur < 0) {
+        largeur = largeur * -1;
       }
     }
-
-    frameCounter++;
   }
+
+  frameCounter++;
+}
+
 }
