@@ -38,7 +38,7 @@ void setup() {
   goCard = new CardRecto(xCardRecto, yCardRecto, cardWidth, cardHeigth);
 
   //voir pour framerate
-  frameRate(60);
+  frameRate(120);
 }
 
 void draw() {
