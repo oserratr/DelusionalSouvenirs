@@ -18,6 +18,8 @@ float xCardRecto;
 float yCardRecto;
 
 boolean debug=true;
+boolean isPlaying = false; // Variable pour indiquer si le son est en train de jouer
+int lastRebootTime = 0; // Temps pour gérer le timer de reboot
 
 void setup() {
   fullScreen(2);
@@ -33,12 +35,11 @@ void setup() {
 
   //Création d'une nouvelle carte
   postCard = new CardVerso(xCard, yCard, cardWidth, cardHeigth);
-  goCard= new CardRecto(xCardRecto, yCardRecto, cardWidth, cardHeigth);
+  goCard = new CardRecto(xCardRecto, yCardRecto, cardWidth, cardHeigth);
 
   //voir pour framerate
-  frameRate(60);
+  frameRate(120);
 }
-
 
 void draw() {
   background(0);
@@ -47,77 +48,77 @@ void draw() {
   imageMode(CENTER);
   image(goCard.pgCardRecto, width / 2, height / 4);
   exportPdfSon();
-  
-  if(debug){
-    float dur = goCard.carteImage.sample.duration();
-    float pos= goCard.carteImage.sample.position();
-    
-    stroke(255,0,0);
-    noFill();
-    rect(
-      50,50,800,20
-    );
-    fill(255,0,0);
-    rect(
-      50,50,map(pos,0,dur,0,800),20
-    );
-    
+
+  // Gestion du timer pour reboot() si le son ne joue pas
+  if (!isPlaying && millis() - lastRebootTime > 1000) {
+    reboot();
+    lastRebootTime = millis(); // Met à jour le dernier temps de reboot
   }
-  
+
+  // appel de la fonction debug
+  if (debug) {
+    float dur = goCard.carteImage.sample.duration();
+    float pos = goCard.carteImage.sample.position();
+
+    stroke(255, 0, 0);
+    noFill();
+    rect(50, 50, 800, 20);
+    fill(255, 0, 0);
+    rect(50, 50, map(pos, 0, dur, 0, 800), 20);
+  }
 }
+
 void mouseClicked() {
-  if (mouseButton == RIGHT) {
+  if (mouseButton == RIGHT && !isPlaying) {  // Ne déclenche que si le son n'est pas en cours de lecture
     println("droit");
     postCard.textEffect.replaceText = true;
     goCard.carteImage.rectoImage = true;
     goCard.carteImage.sample.play();
     goCard.carteImage.rms.input(goCard.carteImage.sample);
-    
-  } else if (mouseButton == LEFT) {
-    println("gauche");
-    reboot();
+    isPlaying = true; // Indique que le son joue
+  } else if (isPlaying) {
+    println("Le son est déjà en cours de lecture.");
   }
 }
 
-void reboot(){
+
+void reboot() {
   int randomIndexOriginal = int(random(postCard.textEffect.textArrayOriginal.length));
-    postCard.textEffect.currentText = postCard.textEffect.textArrayOriginal[randomIndexOriginal];
-    postCard.textEffect.replaceText = false;
-    int randomIndexImage = int (random(goCard.carteImage.images.length));
-    goCard.carteImage.currentImage = goCard.carteImage.images[randomIndexImage];
-    goCard.carteImage.rectoImage = false;
-    goCard.carteImage.frameCounter = 0;
+  postCard.textEffect.currentText = postCard.textEffect.textArrayOriginal[randomIndexOriginal];
+  postCard.textEffect.replaceText = false;
+  int randomIndexImage = int(random(goCard.carteImage.images.length));
+  goCard.carteImage.currentImage = goCard.carteImage.images[randomIndexImage];
+  goCard.carteImage.rectoImage = false;
+  goCard.carteImage.frameCounter = 0;
 }
 
-
 void exportPdfSon() {
-  if (goCard.carteImage.sample.position() > goCard.carteImage.sample.duration()-1) {
+  if (goCard.carteImage.sample.position() > goCard.carteImage.sample.duration() - 1) {
     generatePostCard();
     goCard.carteImage.sample.jump(0);
     delay(3000);
     reboot();
+    isPlaying = false; // Réinitialise l'état pour redémarrer le timer
   }
 }
 
-void keyPressed(){
-  if(key=='d'){
-    debug=!debug;
+// Controllers pour debug (d pour faire apparaitre/disparaitre barre de chargement) & (j pour aller jusqu'a la fin de la card)
+void keyPressed() {
+  if (key == 'd') {
+    debug = !debug;
   }
-  if(key=='j'){
-    goCard.carteImage.sample.jump(goCard.carteImage.sample.duration()-10);
+  if (key == 'j') {
+    goCard.carteImage.sample.jump(goCard.carteImage.sample.duration() - 10);
   }
-  
 }
-
 
 PGraphicsPDF pdf;
 void generatePostCard() {
 
-  int milli_width=150*2;
-  int milli_height=100*2;
-  //float marge=100;
+  int milli_width = 150 * 2;
+  int milli_height = 100 * 2;
 
-  pdf = (PGraphicsPDF) createGraphics(milli_width, milli_height, PDF, "test"+int(random(10000))+".pdf");
+  pdf = (PGraphicsPDF) createGraphics(milli_width, milli_height, PDF, "test" + int(random(10000)) + ".pdf");
   pdf.beginDraw();
   pdf.textMode(SHAPE);
 
@@ -126,18 +127,15 @@ void generatePostCard() {
   pdf.image(
     goCard.pgCardRecto.get(0, 0, goCard.pgCardRecto.width, goCard.pgCardRecto.height),
     0, 0, milli_width, milli_height
-    );
-
+  );
 
   pdf.nextPage();
 
   pdf.image(
     postCard.pg.get(0, 0, postCard.pg.width, postCard.pg.height),
     0, 0, milli_width, milli_height
-    );
+  );
 
   pdf.dispose();
   pdf.endDraw();
-
-  //endRecord();
 }
