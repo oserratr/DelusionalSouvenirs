@@ -4,7 +4,8 @@ class CardVerso {
   float yCard;
   int cardWidth;
   int cardHeight;
-  PFont typoExpediteur;
+  PFont typoAnnexeGras;
+  PFont typoAnnexeLight;
   
   //appel de la classe text
   Text textEffect;
@@ -36,8 +37,16 @@ class CardVerso {
     yCard =_yCard;
     cardWidth =_width;
     cardHeight=_heigth;
+    
+    //attribution font texte annexe
+    typoAnnexeGras = createFont("SuisseEDUIntl-Medium.otf", 14);
+    typoAnnexeLight = createFont("SuisseEDUIntl-Light.otf", 14);
 
     //appel class text
+    //String[] originalTexts = loadStrings("monTexteNeg.txt"); // debug pour voir longeur text
+    //debug long cara
+    /*String[] originalTexts = loadStrings("pos.txt"); // Charger votre fichier texte original
+    String[] replaceTexts = loadStrings("neg.txt");   // Charger votre fichier texte de remplacement*/
     String[] originalTexts = loadStrings("monTextePos.txt"); // Charger votre fichier texte original
     String[] replaceTexts = loadStrings("monTexteNeg.txt");   // Charger votre fichier texte de remplacement
     textEffect = new Text(originalTexts, replaceTexts, posXTextChange, posYTextChange);
@@ -57,35 +66,47 @@ class CardVerso {
     pg.rectMode(positionMode);
     pg.rect(xCard, yCard, cardWidth, cardHeight);
 
-    //configuration text
-    textEffect.draw(pg,260,350);
+    //configuration text courant
+    textEffect.draw(pg,230,340);  
     
     //affichage ligne verticale
-    /*pg.stroke(0);
-    pg.strokeWeight(2);
-    pg.line(500, 250, 500, 510);*/
+    pg.stroke(0);
+    pg.strokeWeight(1);
+    pg.line(510, 30, 510, 570);
 
 
     //affichage lignes horizontales
     pg.stroke(0);
-    pg.strokeWeight(2);
-    pg.line(550, 450, 820, 450);
-    pg.line(550, 250, 820, 250);
-    pg.line(550, 350, 820, 350);
+    pg.strokeWeight(1);
+    pg.line(540, 180, 865, 180);
+    pg.line(540, 250, 865, 250);
+    pg.line(540, 320, 865, 320);
+    pg.line(540, 440, 865, 440);
 
     //affichage timbre rectangle
     //timbrePostal.draw(pg);
     pg.stroke(0);
     pg.noFill();
-    pg.strokeWeight(2);
-    pg.rect(850,60,60,75);
+    pg.strokeWeight(1);
+    pg.rect(843,60,55,61);
+    
+    //affichage texte annexe gras
+    pg.textFont(typoAnnexeGras);
+    pg.textAlign(LEFT);
+    pg.text("This scientific fact is taken from the 6th IPCC report.", 400, 510,190,50);
+    
+    //affichage texte annexe light
+    pg.textFont(typoAnnexeLight);
+    pg.textAlign(LEFT);
+    pg.text("© Delusional Souvenirs", 400, 550,190,50);
+    pg.text("Océane Serrat and Mathilde Schibler, 2024.", 400, 567,160,50);
+
 
     //affichage adresse expediteur
     //textFont(typoExpediteur);
     pg.fill(146, 146, 146);
     pg.textSize(26);
     pg.noStroke();
-    pg.text("CHAMONIX - MONT-BLANC", 40, 50);
     //xCard+34, yCard+1470);
     pg.endDraw();
     
