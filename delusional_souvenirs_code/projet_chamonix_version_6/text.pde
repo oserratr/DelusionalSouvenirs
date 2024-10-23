@@ -25,7 +25,7 @@ class Text {
     posXTextChange = _posXTextChange;
     posYTextChange = _posYTextChange;
 
-    myFont = createFont("PPNeueMontreal-Medium.otf", 50);
+    myFont = createFont("SuisseEDUIntl-Medium.otf", 45);
   }
 
   void draw(PGraphics pg, float _x, float _y) {
@@ -33,8 +33,8 @@ class Text {
     pg.textSize(25);
     pg.textFont(myFont);
     pg.textAlign(LEFT);
-    xWidth = 450;
-    yHeight = 400;
+    xWidth = 400;
+    yHeight = 500;
     pg.text(currentText, _x, _y, xWidth, yHeight);
     
     if (replaceText == true && !isReplacing) {
