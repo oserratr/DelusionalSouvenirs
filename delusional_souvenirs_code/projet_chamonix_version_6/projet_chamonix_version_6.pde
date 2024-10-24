@@ -115,27 +115,41 @@ void keyPressed() {
 PGraphicsPDF pdf;
 void generatePostCard() {
 
-  int milli_width = 150 * 2;
-  int milli_height = 100 * 2;
+  // Obtenir le chemin du dossier dynamiquement
+  String filePath = System.getProperty("user.home") + "/Desktop/output.pdf";
 
-  pdf = (PGraphicsPDF) createGraphics(milli_width, milli_height, PDF, "test" + int(random(10000)) + ".pdf");
+ /* int milli_width = 150 * 2;
+  int milli_height = 100 * 2;*/
+  
+  int milli_width = 405 ;
+  int milli_height = 270 ;
+
+  //pdf = (PGraphicsPDF) createGraphics(milli_width, milli_height, PDF, "test" + int(random(10000)) + ".pdf");
+  pdf = (PGraphicsPDF) createGraphics(milli_width, milli_height, PDF, filePath);
   pdf.beginDraw();
   pdf.textMode(SHAPE);
 
-  goCard.pgCardRecto.loadPixels();
-
-  pdf.image(
-    goCard.pgCardRecto.get(0, 0, goCard.pgCardRecto.width, goCard.pgCardRecto.height),
-    0, 0, milli_width, milli_height
-  );
-
-  pdf.nextPage();
+  // Pour générer un pdf des deux pages, enlever le commentaire suivant:
+  /*goCard.pgCardRecto.loadPixels();
+   
+   pdf.image(
+   goCard.pgCardRecto.get(0, 0, goCard.pgCardRecto.width, goCard.pgCardRecto.height),
+   0, 0, milli_width, milli_height
+   );
+   
+   pdf.nextPage();*/
 
   pdf.image(
     postCard.pg.get(0, 0, postCard.pg.width, postCard.pg.height),
     0, 0, milli_width, milli_height
-  );
+    );
 
   pdf.dispose();
   pdf.endDraw();
+  println("PDF généré dans le dossier : " + filePath);
+
+  // Commande pour imprimer le PDF avec une imprimante spécifique en noir et blanc, format 10x15 cm, paysage, ajusté et centré
+  //String[] cmd = {"sh", "-c", "lp -o media=Custom.100x150mm -o ColorModel=Gray -o fit-to-page -o scaling=100 -o page-left=0 -o page-right=0 -o page-top=0 -o page-bottom=0 -o landscape " + filePath}; // Envoie le PDF à l'imprimante
+  String[] cmd = {"sh", "-c", "lp -o media=Custom.100x150mm -o ColorModel=Gray -o landscape -o fit-to-page -o scaling=200 -o page-left=0 -o page-right=0 -o page-top=0 -o page-bottom=0 " + filePath}; // Envoie le PDF à l'imprimante
+  exec(cmd); // Exécute la commande pour imprimer
 }
