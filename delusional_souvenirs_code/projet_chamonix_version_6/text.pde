@@ -36,13 +36,13 @@ class Text {
     xWidth = 400;
     yHeight = 500;
     pg.text(currentText, _x, _y, xWidth, yHeight);
-    
+
     if (replaceText == true && !isReplacing) {
       // On commence le remplacement : on choisit un index pour le remplacement et on active le flag
       randomIndexReplace = int(random(textArrayReplace.length));
       isReplacing = true;  // Active le flag pour indiquer que le remplacement a commencé
     }
-    
+
     if (replaceText == true) {
       // Vérifie si une demi-seconde s'est écoulée
       if (millis() - lastTime >= interval) {
