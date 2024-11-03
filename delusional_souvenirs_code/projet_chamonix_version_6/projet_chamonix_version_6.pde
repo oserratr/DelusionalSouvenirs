@@ -118,11 +118,12 @@ void generatePostCard() {
   // Obtenir le chemin du dossier dynamiquement
   String filePath = System.getProperty("user.home") + "/Desktop/output.pdf";
 
- /* int milli_width = 150 * 2;
-  int milli_height = 100 * 2;*/
-  
+  //int milli_width = 150 * 2;
+  // int milli_height = 100 * 2;
+
   int milli_width = 405 ;
   int milli_height = 270 ;
+  
 
   //pdf = (PGraphicsPDF) createGraphics(milli_width, milli_height, PDF, "test" + int(random(10000)) + ".pdf");
   pdf = (PGraphicsPDF) createGraphics(milli_width, milli_height, PDF, filePath);
@@ -150,6 +151,8 @@ void generatePostCard() {
 
   // Commande pour imprimer le PDF avec une imprimante spécifique en noir et blanc, format 10x15 cm, paysage, ajusté et centré
   //String[] cmd = {"sh", "-c", "lp -o media=Custom.100x150mm -o ColorModel=Gray -o fit-to-page -o scaling=100 -o page-left=0 -o page-right=0 -o page-top=0 -o page-bottom=0 -o landscape " + filePath}; // Envoie le PDF à l'imprimante
-  String[] cmd = {"sh", "-c", "lp -o media=Custom.100x150mm -o ColorModel=Gray -o landscape -o fit-to-page -o scaling=200 -o page-left=0 -o page-right=0 -o page-top=0 -o page-bottom=0 " + filePath}; // Envoie le PDF à l'imprimante
+  //String[] cmd = {"sh", "-c", "lp -o media=Custom.100x150mm -o ColorModel=Gray -o landscape -o fit-to-page -o scaling=200 -o page-left=0 -o page-right=0 -o page-top=0 -o page-bottom=0 " + filePath}; // Envoie le PDF à l'imprimante
+  String[] cmd = {"sh", "-c", "lp -o landscape" + filePath}; // Envoie le PDF à l'imprimante
   exec(cmd); // Exécute la commande pour imprimer
+  
 }
