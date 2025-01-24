@@ -92,6 +92,7 @@ class CardVerso {
     
     //affichage texte annexe gras
     pg.textFont(typoAnnexeGras);
+    pg.fill(c);
     pg.textAlign(LEFT);
     pg.text("This scientific fact is taken from the 6th IPCC report.", 400, 510,190,50);
     
